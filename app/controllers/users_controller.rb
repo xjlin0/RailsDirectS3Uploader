@@ -14,14 +14,12 @@ class UsersController < ApplicationController
 
   # GET /users/new
   def new
-
-    p "users_controller line 17"
-    p @s3_direct_post = S3_BUCKET.presigned_post(key: "uploads/#{SecureRandom.uuid}/${filename}", success_action_status: 201, acl: :public_read)
+    @s3_direct_post = S3_BUCKET.presigned_post(key: "uploads/#{SecureRandom.uuid}/${filename}", success_action_status: 201, acl: :public_read)
     s3_hash = Hash.new
-    s3_hash['url'] = @s3_direct_post.url
+    s3_hash['url']       = @s3_direct_post.url
     s3_hash['urlstring'] = @s3_direct_post.url.to_s
-    p s3_hash['hostlink'] = @s3_direct_post.url.host
-    s3_hash['fields'] = @s3_direct_post.fields
+    s3_hash['hostlink']  = @s3_direct_post.url.host
+    s3_hash['fields']    = @s3_direct_post.fields
     gon.push(s3_hash)
     @user = User.new
   end
@@ -71,13 +69,13 @@ class UsersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user
-      @user = User.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_user
+    @user = User.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def user_params
-      params.require(:user).permit(:name, :avatar_url)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def user_params
+    params.require(:user).permit(:name, :avatar_url)
+  end
 end
